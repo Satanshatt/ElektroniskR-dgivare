@@ -1,5 +1,6 @@
 import time
 import machine
+import random
 from pico_i2c_lcd import I2cLcd
 from mlx90614 import MLX90614
 
@@ -25,7 +26,7 @@ lcd = I2cLcd(i2c_lcd, lcd_devices[0], 2, 16)
 # Initialize MLX90614
 sensor = MLX90614(i2c_sensor)
 
-def clearScreen():
+def clear_screen():
     lcd.clear()
     lcd.move_to(0, 0)
     time.sleep(0.05)
@@ -42,10 +43,32 @@ def wait_for_button():
         time.sleep(0.05)
 
 def show_options():
-    clearScreen()
+    clear_screen()
     lcd.putstr("1:Apple 2:Kiwi")
     lcd.move_to(1, 0)  # move_to(col, row)
     lcd.putstr("3:Orange")
+    
+#TODO: Create a randomize function which randomizes which set of options from the tuple is displayed to the user
+def randomize_question(options_list):
+    randomInt = random.randint(1, 20)
+    #return a random integer used to select a question from the list of options
+    #call on separate_options
+    #return the three options 
+
+#TODO: Function which separates and sorts the options into 3 variables that can then be used in display_options
+def separate_options():
+  
+#TODO: Create a function which reads from a file and adds all the options into a tuple 
+def read_options_from_file():
+    #Reads from file (read once)
+    #Return a tuple with the different sets of options e.g [1: kiwi, lemon, mango], [2: blue, black, green]
+    
+#New display function to display no matter what the options are 
+def display_options(option1, option2, option3):
+    clear_screen()
+    lcd.putstr("1:" + option1 + " 2:" + option2)
+    lcd.move_to(1,0)
+    lcd.putstr("3:" + option3)   
 
 def decide(temp, fruit_choice):
     """Decision based on finger temperature."""
@@ -74,9 +97,9 @@ def decide(temp, fruit_choice):
 # --- Program start ---
 
 # Step 1: Measure temperature
-clearScreen()
+clear_screen()
 lcd.putstr("Measure temp")
-time.sleep(2)
+time.sleep(5)
 
 # Average 3 readings for stability
 temps = []
@@ -86,14 +109,17 @@ for _ in range(3):
 
 user_temp = sum(temps) / len(temps)
 
-clearScreen()
+clear_screen()
 lcd.putstr(f"Temp: {user_temp:.1f}C")
-time.sleep(3)
+time.sleep(5)
 
+#Change this flow so that this happens 3 times and uses the functions to implement above under TODO
 # Step 2: Ask first question
-clearScreen()
-lcd.putstr("Pick a fruit")
-time.sleep(2)
+clear_screen()
+lcd.putstr("Pick what you")
+lcd.move_to(1, 0)
+lcd.putstr("resonate with")
+time.sleep(3)
 
 show_options()
 
@@ -104,17 +130,21 @@ fruit_choice = wait_for_button()
 decision = decide(user_temp, fruit_choice)
 
 # Step 5: Show result
-clearScreen()
+clear_screen()
 lcd.putstr("Decision:")
 lcd.move_to(1, 0)
 lcd.putstr(decision)
 
-# Also print to console
-print(f"User Temp: {user_temp:.2f}C")
-print(f"Fruit Choice: {fruit_choice}")
-print(f"Decision: {decision}")
+# If want to print to console
+#print(f"User Temp: {user_temp:.2f}C")
+#print(f"Fruit Choice: {fruit_choice}")
+#print(f"Decision: {decision}")
+
+#TODO: Add a restart function once the reading is done 
 
 # Done
 while True:
     time.sleep(1)
+
+
 

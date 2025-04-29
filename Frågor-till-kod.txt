@@ -1,0 +1,39 @@
+Frågor till kod
+Pick what you resonate with
+
+1: Pink; 2: Green; 3:Gold
+1: Guinea; 2: Pig;  3: Elephant
+1: Yes; 2: No; 3: Maybe
+1: Bird; 2: Fish; 3: In Between
+1: Banana; 2: Kiwi; 3: Lemon
+1: Morning; 2: Day; 3: Night
+1: Sunshine; 2: Rain; 3: Storm
+1: Triangle; 2: Circle; 3: Spiral 
+1: Fire; 2: Water; 3: Earth
+1: Feather; 2: Stone; 3: Scale
+1: Seabreeze; 2: Baked Bread; 3: Rain On Asphalt
+1: Lantern; 2: Mirror; 3: Key
+1: Velvet; 2: Denim; 3: Lace
+1: Ocean; 2:Desert; 3: Forest
+1: Whisper; 2: Song; 3: Silence
+1: Cloud; 2: River; 3: Mountain
+1: Silver; 2: Copper; 3: Amethyst
+1: North; 2: South; 3: Somewhere Else
+1: Ink; 2: Dust; 3: Flame
+1: ​Glass; 2: Clay; 3: Wood
+1: Salt; 2: Sugar; 3: Spice
+1: North Star; 2: Eclipse; 3: Comet
+1: Moss; 2: Sand; 3: Snow
+1: Whale Song; 2: Crackling Fire; 3: Clock Ticking
+1: Hollow; 2: Solid; 3: Shifting
+1: Memory; 2: Dream; 3: Echo
+1: Root; 2: Petal; 3: Thorn
+1: Blank Page; 2: Love Letter; 3: Burned Map
+1: Heartbeat; 2: Footstep; 3: Breath
+1: Tea; 2: Coffee; 3: Cocoa
+1: Lanternlight; 2: Neon; 3: Shadow
+1: Wool; 2: Silk; 3: Metal
+1: Beginning; 2: Middle; 3: End
+1: Horizon; 2: Canyon; 3: Cave
+1: Fiction; 2: Truth; 3: Myth
+1: Thread; 2: Chain; 3: Ribbon

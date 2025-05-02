@@ -37,14 +37,43 @@ Pick what you resonate with
 1: Horizon; 2: Canyon; 3: Cave
 1: Fiction; 2: Truth; 3: Myth
 1: Thread; 2: Chain; 3: Ribbon
-
-
-
-
-
-
-
-
-
-
-
+1: Cloud — Stone — Fire
+1: Petal; 2: Root; 3: Bark
+1: Mirrorball; 2: Spotlight; 3: Shadow
+1: Paper; 2: Ink; 3: Eraser
+1: Thunder; 2: Breeze; 3: Silence
+1: Honey; 2: Lemon; 3: Vinegar
+1: Snowflake; 2: Raindrop; 3: Dew
+1: Fox; 2: Owl; 3: Deer
+1: Compass; 2: Map; 3: Star
+1: Flame; 2: Smoke; 3: Ash
+1: Blanket; 2: Pillow; 3: Quilt
+1: Lace; 2: Leather; 3: Velvet
+1: Shadow; 2: Light; 3: Twilight
+1: Crystal; 2: Bone; 3: Fossil
+1: Whisper; 2: Shout; 3: Hum
+1: Branch; 2: Vine; 3: Root
+1: Gold; 2: Jade; 3: Obsidian
+1: Pulse; 2: Echo; 3: Stillness
+1: Rhythm; 2: Silence; 3: Noise
+1: Tunnel; 2: Bridge; 3: Door
+1: Fog; 2: Rain; 3: Snow
+1: Lantern; 2: Compass; 3: Match
+1: Thread; 2: Nail; 3: Pin
+1: Dream; 2: Thought; 3: Feeling
+1: Hummingbird; 2: Wolf; 3: Whale
+1: Driftwood; 2: Coral; 3: Pearl
+1: Cinnamon; 2: Cardamom; 3: Clove
+1: Quartz; 2: Coal; 3: Ice
+1: Meadow; 2: Glacier; 3: Volcano
+1: Staircase; 2: Tunnel; 3: Rope
+1: Static; 2: Vibration; 3: Flow
+1: Cave; 2: Nest; 3: Hollow
+1: Sketch; 2: Blueprint; 3: Sculpture
+1: Clock; 2: Mirror; 3: Candle
+1: Bite; 2: Sip; 3: Scent
+1: Raven; 2: Dove; 3: Crow
+1: Ember; 2: Coal; 3: Spark
+1: Poem; 2: Song; 3: Spell
+1: Inkpot; 2: Brush; 3: Knife
+1: Branch; 2: Leaf; 3: Seed

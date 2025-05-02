@@ -11,9 +11,9 @@ i2c_lcd = machine.I2C(0, sda=machine.Pin(0), scl=machine.Pin(1), freq=400000)
 i2c_sensor = machine.I2C(1, sda=machine.Pin(10), scl=machine.Pin(11), freq=100000)
 
 # Buttons
-button1 = machine.Pin(2, machine.Pin.IN, machine.Pin.PULL_UP)
-button2 = machine.Pin(3, machine.Pin.IN, machine.Pin.PULL_UP)
-button3 = machine.Pin(4, machine.Pin.IN, machine.Pin.PULL_UP)
+button1 = machine.Pin(7, machine.Pin.IN, machine.Pin.PULL_UP)
+button2 = machine.Pin(8, machine.Pin.IN, machine.Pin.PULL_UP)
+button3 = machine.Pin(9, machine.Pin.IN, machine.Pin.PULL_UP)
 
 # MOSFET Control (NEW)
 mosfet_gate = machine.Pin(15, machine.Pin.OUT)

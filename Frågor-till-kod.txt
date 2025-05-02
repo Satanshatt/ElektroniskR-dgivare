@@ -37,3 +37,14 @@ Pick what you resonate with
 1: Horizon; 2: Canyon; 3: Cave
 1: Fiction; 2: Truth; 3: Myth
 1: Thread; 2: Chain; 3: Ribbon
+
+
+
+
+
+
+
+
+
+
+

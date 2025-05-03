@@ -68,23 +68,22 @@ def user_menu():
             blueLED.off()
             redLED.off()
             greenLED.off()
-            break
 
-    while True:
-        blueLED.on()  
-        clear_screen() 
-        lcd.putstr("Think of a")
-        lcd.move_to(1,0) 
-        lcd.putstr("yes/no question")
-        clear_screen() 
-        lcd.putstr("Press any key")
-        lcd.move_to(1,0) 
-        lcd.putstr("when ready")
-
-        button_push = wait_for_button()
-        if button_push:
-            blueLED.off()
-            return None
+            while True:
+                blueLED.on()  
+                clear_screen() 
+                lcd.putstr("Think of a")
+                lcd.move_to(1,0) 
+                lcd.putstr("yes/no question")
+                clear_screen() 
+                lcd.putstr("Press any key")
+                lcd.move_to(1,0) 
+                lcd.putstr("when ready")
+        
+                button_push = wait_for_button()
+                if button_push:
+                    blueLED.off()
+                    return None
 
 
 def show_options():

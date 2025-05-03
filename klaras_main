@@ -56,17 +56,36 @@ def wait_for_button():
 
 
 def user_menu():
-    while True: 
+    while True:  
+        blueLED.on()
+        redLED.on()
+        greenLED.on()
         clear_screen() 
         lcd.putstr("Press button")
         lcd.move_to(1,0) 
         lcd.putstr("to start")
-        blueLED.on()  
+        
         button_push = wait_for_button()
         if button_push:
             blueLED.off()
-            return None 
+            redLED.off()
+            greenLED.off()
 
+            while True:
+                blueLED.on()  
+                clear_screen() 
+                lcd.putstr("Think of a")
+                lcd.move_to(1,0) 
+                lcd.putstr("yes/no question")
+                clear_screen() 
+                lcd.putstr("Press any key")
+                lcd.move_to(1,0) 
+                lcd.putstr("when ready")
+        
+                button_push = wait_for_button()
+                if button_push:
+                    blueLED.off()
+                    return None
 
 
 

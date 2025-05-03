@@ -39,7 +39,7 @@ sensor = MLX90614(i2c_sensor)
 def clear_screen():
     lcd.clear()
     lcd.move_to(0, 0)
-    time.sleep(0.05)
+    time.sleep(0.5)
 
 def wait_for_button():
     while True:

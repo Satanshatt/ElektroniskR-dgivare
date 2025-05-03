@@ -1,0 +1,221 @@
+import time
+import machine
+import random
+from pico_i2c_lcd import I2cLcd
+from mlx90614 import MLX90614
+
+
+# --- Hardware Setup ---
+# LCD (I2C0)
+i2c_lcd = machine.I2C(0, sda=machine.Pin(0), scl=machine.Pin(1), freq=400000)
+# Temp Sensor (I2C1)
+i2c_sensor = machine.I2C(1, sda=machine.Pin(10), scl=machine.Pin(11), freq=100000)
+
+
+# Buttons
+button1 = machine.Pin(7, machine.Pin.IN, machine.Pin.PULL_UP)
+button2 = machine.Pin(8, machine.Pin.IN, machine.Pin.PULL_UP)
+button3 = machine.Pin(9, machine.Pin.IN, machine.Pin.PULL_UP)
+
+
+# Initialize LED pins
+# Initialize LED pins and force them OFF immediately
+greenLED = machine.Pin(15, machine.Pin.OUT, value=0)  # Starts OFF
+redLED = machine.Pin(14, machine.Pin.OUT, value=0)    # Starts OFF
+blueLED = machine.Pin(13, machine.Pin.OUT, value=0)   # Starts OFF
+
+
+# Initialize LCD
+lcd_devices = i2c_lcd.scan()
+if not lcd_devices:
+    print("No LCD found!")
+    while True: pass
+lcd = I2cLcd(i2c_lcd, lcd_devices[0], 2, 16)
+
+
+
+# Initialize Temperature sensor
+sensor = MLX90614(i2c_sensor)
+
+
+
+# --- Functions ---
+def clear_screen():
+    lcd.clear()
+    lcd.move_to(0, 0)
+    time.sleep(0.05)
+
+def wait_for_button():
+    while True:
+        if not button1.value(): return 1
+        if not button2.value(): return 2
+        if not button3.value(): return 3
+        time.sleep(0.05)
+
+
+def user_menu():
+    while True:  
+        blueLED.on()
+        redLED.on()
+        greenLED.on()
+        clear_screen() 
+        lcd.putstr("Press button")
+        lcd.move_to(1,0) 
+        lcd.putstr("to start")
+        
+        button_push = wait_for_button()
+        if button_push:
+            blueLED.off()
+            redLED.off()
+            greenLED.off()
+            break
+
+    while True:
+        blueLED.on()  
+        clear_screen() 
+        lcd.putstr("Think of a")
+        lcd.move_to(1,0) 
+        lcd.putstr("yes/no question")
+        clear_screen() 
+        lcd.putstr("Press any key")
+        lcd.move_to(1,0) 
+        lcd.putstr("when ready")
+
+        button_push = wait_for_button()
+        if button_push:
+            blueLED.off()
+            return None
+
+
+def show_options():
+    clear_screen()
+    lcd.putstr("1:Apple 2:Kiwi")
+    lcd.move_to(1, 0)
+    lcd.putstr("3:Orange")
+
+
+
+def get_random_line(filename):
+    with open(filename, 'r') as file:
+        lines = file.readlines()  # Read all lines into a list
+        random_line = random.choice(lines).strip()  # Pick a random line and remove \n
+    return random_line
+
+
+
+def comment_temp(temp):
+    if temp < 22.0:
+        clear_screen() 
+        lcd.putstr("Cold blooded?")
+        time.sleep(2)
+        clear_screen()
+        lcd.putstr("Now included in")
+        lcd.move_to(1,0) 
+        lcd.putstr("my calculations")
+        time.sleep(2)
+        clear_screen()
+
+    elif 22.0 <= temp <= 26.0:
+        clear_screen() 
+        lcd.putstr("Middle blooded?")
+        time.sleep(2)
+        clear_screen()
+        lcd.putstr("Now included in")
+        lcd.move_to(1,0) 
+        lcd.putstr("my calculations")
+        time.sleep(2)
+        clear_screen()
+
+    else:
+        clear_screen() 
+        lcd.putstr("Warm blooded?")
+        time.sleep(2)
+        clear_screen()
+        lcd.putstr("Now included in")
+        lcd.move_to(1,0) 
+        lcd.putstr("my calculations")
+        time.sleep(2)
+        clear_screen()
+
+
+
+def decide(temp, choice):
+    """Decision logic with MOSFET control"""
+    decision = "Maybe"  # Default
+    
+    if temp < 22.0:
+        decision = "Yes" if choice == 1 else "Maybe" if choice == 2 else "No"
+
+    elif 22.0 <= temp <= 26.0:
+        decision = "Maybe" if choice == 1 else "Yes" if choice == 2 else "Maybe"
+
+    else:
+        decision = "No" if choice == 1 else "Maybe" if choice == 2 else "Yes"
+    
+    # Control MOSFET based on decision (NEW)
+    greenLED.value(1 if decision == "Yes" else 0)
+    redLED.value(1 if decision == "No" else 0)
+    blueLED.value(1 if decision == "Maybe" else 0)
+    return decision
+
+
+def restart_program():
+    """Reset after showing results"""
+    time.sleep(5)  # Show decision for 5 seconds
+    greenLED.off()  # Turn off MOSFET
+    blueLED.off()
+    redLED.off()
+    machine.reset()  # Soft reboot
+
+# --- Main Program ---
+def main():
+
+    clear_screen()
+    user_menu()
+
+    # Measure temperature
+    clear_screen()
+    lcd.putstr("Measure temp")
+    time.sleep(5)
+    
+    temps = [sensor.object_temp for _ in range(3)]
+    user_temp = sum(temps) / len(temps)
+    
+    clear_screen()
+    lcd.putstr(f"Temp: {user_temp:.1f}C")
+    time.sleep(3)
+
+    comment_temp(user_temp) #print out comment abt temp to user
+
+    # Show options
+    clear_screen()
+    lcd.putstr("Pick what you")
+    lcd.move_to(1, 0)
+    lcd.putstr("resonate with")
+    time.sleep(3)
+
+    random_line = get_random_line("selections.txt")
+    option1, option2, option3 = random_line.split(',')
+
+    clear_screen()
+    lcd.putstr(f"1:{option1} 2:{option2}")
+    lcd.move_to(1, 0)
+    lcd.putstr(f"3:{option3}")
+
+    choice = wait_for_button()
+
+
+    # Make decision
+    decision = decide(user_temp, choice)
+    
+    # Show result
+    clear_screen()
+    lcd.putstr("Decision:")
+    lcd.move_to(1, 0)
+    lcd.putstr(decision)
+    
+    # Auto-restart (NEW)
+    restart_program()
+
+if __name__ == "__main__":
+    main()

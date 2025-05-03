@@ -4,18 +4,21 @@ import random
 from pico_i2c_lcd import I2cLcd
 from mlx90614 import MLX90614
 
+
 # --- Hardware Setup ---
 # LCD (I2C0)
 i2c_lcd = machine.I2C(0, sda=machine.Pin(0), scl=machine.Pin(1), freq=400000)
 # Temp Sensor (I2C1)
 i2c_sensor = machine.I2C(1, sda=machine.Pin(10), scl=machine.Pin(11), freq=100000)
 
+
 # Buttons
 button1 = machine.Pin(7, machine.Pin.IN, machine.Pin.PULL_UP)
 button2 = machine.Pin(8, machine.Pin.IN, machine.Pin.PULL_UP)
 button3 = machine.Pin(9, machine.Pin.IN, machine.Pin.PULL_UP)
 
-# MOSFET Control (NEW)
+
+# Initialize LED pins
 greenLED = machine.Pin(15, machine.Pin.OUT)
 redLED = machine.Pin(14, machine.Pin.OUT)
 blueLED = machine.Pin(13, machine.Pin.OUT)
@@ -25,6 +28,7 @@ greenLED.off()  # Start with MOSFET OFF
 redLED.off()
 blueLED.off()
 
+
 # Initialize LCD
 lcd_devices = i2c_lcd.scan()
 if not lcd_devices:
@@ -32,8 +36,12 @@ if not lcd_devices:
     while True: pass
 lcd = I2cLcd(i2c_lcd, lcd_devices[0], 2, 16)
 
-# Initialize MLX90614
+
+
+# Initialize Temperature sensor
 sensor = MLX90614(i2c_sensor)
+
+
 
 # --- Functions ---
 def clear_screen():
@@ -53,6 +61,17 @@ def show_options():
     lcd.putstr("1:Apple 2:Kiwi")
     lcd.move_to(1, 0)
     lcd.putstr("3:Orange")
+
+
+
+def get_random_line(filename):
+    with open(filename, 'r') as file:
+        lines = file.readlines()  # Read all lines into a list
+        random_line = random.choice(lines).strip()  # Pick a random line and remove \n
+    return random_line
+
+
+
 
 def decide(temp, choice):
     """Decision logic with MOSFET control"""
@@ -92,19 +111,28 @@ def main():
     clear_screen()
     lcd.putstr(f"Temp: {user_temp:.1f}C")
     time.sleep(3)
-    
+
+
     # Show options
     clear_screen()
     lcd.putstr("Pick what you")
     lcd.move_to(1, 0)
     lcd.putstr("resonate with")
     time.sleep(3)
-    
-    show_options()
-    fruit_choice = wait_for_button()
-    
+
+    random_line = get_random_line("selections.txt")
+    option1, option2, option3 = random_line.split(',')
+
+    clear_screen()
+    lcd.putstr(f"1:{option1} 2:{option2}")
+    lcd.move_to(1, 0)
+    lcd.putstr(f"3:{option3}")
+
+    choice = wait_for_button()
+
+
     # Make decision
-    decision = decide(user_temp, fruit_choice)
+    decision = decide(user_temp, choice)
     
     # Show result
     clear_screen()

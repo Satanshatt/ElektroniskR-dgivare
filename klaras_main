@@ -19,14 +19,10 @@ button3 = machine.Pin(9, machine.Pin.IN, machine.Pin.PULL_UP)
 
 
 # Initialize LED pins
-greenLED = machine.Pin(15, machine.Pin.OUT)
-redLED = machine.Pin(14, machine.Pin.OUT)
-blueLED = machine.Pin(13, machine.Pin.OUT)
-
-#start with all LED Off 
-greenLED.off()  # Start with MOSFET OFF
-redLED.off()
-blueLED.off()
+# Initialize LED pins and force them OFF immediately
+greenLED = machine.Pin(15, machine.Pin.OUT, value=0)  # Starts OFF
+redLED = machine.Pin(14, machine.Pin.OUT, value=0)    # Starts OFF
+blueLED = machine.Pin(13, machine.Pin.OUT, value=0)   # Starts OFF
 
 
 # Initialize LCD
@@ -92,10 +88,39 @@ def decide(temp, choice):
     decision = "Maybe"  # Default
     
     if temp < 22.0:
+        clear_screen() 
+        lcd.putstr("Cold blooded?")
+        time.sleep(2)
+        clear_screen()
+        lcd.putstr("Now included in")
+        lcd.move_to(1,0) 
+        lcd.putstr("my calculations")
+        time.sleep(2)
+
         decision = "Yes" if choice == 1 else "Maybe" if choice == 2 else "No"
+
     elif 22.0 <= temp <= 26.0:
+        clear_screen() 
+        lcd.putstr("Cold blooded?")
+        time.sleep(2)
+        clear_screen()
+        lcd.putstr("Now included in")
+        lcd.move_to(1,0) 
+        lcd.putstr("my calculations")
+        time.sleep(2)
+
         decision = "Maybe" if choice == 1 else "Yes" if choice == 2 else "Maybe"
+
     else:
+        clear_screen() 
+        lcd.putstr("Cold blooded?")
+        time.sleep(2)
+        clear_screen()
+        lcd.putstr("Now included in")
+        lcd.move_to(1,0) 
+        lcd.putstr("my calculations")
+        time.sleep(2)
+
         decision = "No" if choice == 1 else "Maybe" if choice == 2 else "Yes"
     
     # Control MOSFET based on decision (NEW)

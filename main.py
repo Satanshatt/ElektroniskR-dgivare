@@ -11,13 +11,19 @@ i2c_lcd = machine.I2C(0, sda=machine.Pin(0), scl=machine.Pin(1), freq=400000)
 i2c_sensor = machine.I2C(1, sda=machine.Pin(10), scl=machine.Pin(11), freq=100000)
 
 # Buttons
-button1 = machine.Pin(2, machine.Pin.IN, machine.Pin.PULL_UP)
-button2 = machine.Pin(3, machine.Pin.IN, machine.Pin.PULL_UP)
-button3 = machine.Pin(4, machine.Pin.IN, machine.Pin.PULL_UP)
+button1 = machine.Pin(7, machine.Pin.IN, machine.Pin.PULL_UP)
+button2 = machine.Pin(8, machine.Pin.IN, machine.Pin.PULL_UP)
+button3 = machine.Pin(9, machine.Pin.IN, machine.Pin.PULL_UP)
 
 # MOSFET Control (NEW)
-mosfet_gate = machine.Pin(15, machine.Pin.OUT)
-mosfet_gate.off()  # Start with MOSFET OFF
+greenLED = machine.Pin(15, machine.Pin.OUT)
+redLED = machine.Pin(14, machine.Pin.OUT)
+blueLED = machine.Pin(13, machine.Pin.OUT)
+
+# Start with MOSFET OFF to turn all LED off 
+redLED.off()
+greenLED.off()
+blueLED.off()
 
 # Initialize LCD
 lcd_devices = i2c_lcd.scan()
@@ -42,9 +48,14 @@ def wait_for_button():
         if not button3.value(): return 3
         time.sleep(0.05)
 
+def turnLEDOff():
+    redLED.off()
+    greenLED.off()
+    blueLED.off()
+
 #generates a random set of options and returns the 3 options as 3 separate variables 
 def generateOptions(optionList):
-    randomInt = random.randint(1, len(optionList) - 1)
+    randomInt = random.randint(0, len(optionList) - 1)
     options = optionList[randomInt]  # Get the list of options at the specified index
     option1, option2, option3 = None, None, None  # Initialize the three variables
 
@@ -60,7 +71,7 @@ def generateOptions(optionList):
     return option1, option2, option3
   
 #Reads from file once, returns a list with lists with the different sets of options e.g [1: kiwi, lemon, mango], [2: blue, black, green]
-def read_options_from_file(filename, ):
+def read_options_from_file(filename):
     optionsList = [] #Create an empty list which will contain lists of the different options 
     with open(filename + '.txt', 'r') as file: #open the file with all options with format "kiwi,lemon,lime"
     # Read each line in the file
@@ -91,39 +102,49 @@ def make_decision(temp, decisions):
         # If the first decision is longer than 5 characters, assign "Yes"
         if len(decision1) > 5:
             decision = "Yes"
+            greenLED.on()
         elif len(decision2) > 5:
             decision = "Maybe"
+            blueLED.on()
         else:
             decision = "No"
+            redLED.on()
     
     elif 22.0 <= temp <= 26.0:
         # If the second decision starts with a vowel, assign "Yes"
         if decision2[0].lower() in 'aeiou':  # Check if first letter is a vowel
             decision = "Yes"
+            greenLED.on()
         elif len(decision3) > 4:
             decision = "Maybe"
+            blueLED.on()
         else:
             decision = "No"
+            redLED.on()
     
     else:
         # If the third decision contains the letter 'a', assign "Yes"
         if 'a' in decision3.lower():
             decision = "Yes"
+            greenLED.on()
         elif len(decision1) > 3:
             decision = "Maybe"
+            blueLED.on()
         else:
             decision = "No"
+            redLED.on()
 
     # Control MOSFET based on final decision (Yes/No logic)
-    mosfet_gate.value(1 if decision == "Yes" else 0)
+    greenLED.value(1 if decision == "Yes" else 0)
     
     return decision
 
 def restart_program():
     """Reset after showing results"""
     time.sleep(5)  # Show decision for 5 seconds
-    mosfet_gate.off()  # Turn off MOSFET
-    machine.reset()  # Soft reboot
+    turnLEDOff()  # Turn off MOSFET
+    return
+    #machine.reset()  # Soft reboot
 
 
 #helper function which handles a user interaction and returns the users temperature and then their three answers 
@@ -162,7 +183,12 @@ def askQuestion(optionsList):
     option1, option2, option3 = generateOptions(optionsList)
     display_options(option1, option2, option3)
     user_choice = wait_for_button()
-    return user_choice
+    if user_choice == 1:
+        return option1
+    elif user_choice == 2:
+        return option2
+    else:
+        return option3
 
 #helper function to display the decision on the screen 
 def display_decision(decision):
@@ -175,12 +201,11 @@ def display_decision(decision):
 #Main program should open file and initialize the user loop, User loop should run over and over 
 def main(): 
 
-    #TODO: pass the name of the file, get file name 
-    optionsList = read_options_from_file()
+    optionsList = read_options_from_file("selections.txt")
     runUserLoop = True
 
     while(runUserLoop):
-        user_answers, user_temp = userInteraction()
+        user_answers, user_temp = userInteraction(optionsList)
         decision = make_decision(user_temp, user_answers)
         display_decision(decision)
         restart_program()

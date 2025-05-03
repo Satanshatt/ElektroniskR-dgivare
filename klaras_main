@@ -56,6 +56,20 @@ def wait_for_button():
         if not button3.value(): return 3
         time.sleep(0.05)
 
+
+def user_menu():
+    clear_screen()
+    lcd.putstr("Press button")
+    lcd.move_to(1, 0)
+    lcd.putstr("to start")
+    blueLED.value(1)
+
+    button_push = wait_for_button()
+    if button_push:
+        blueLED.off()
+        break
+
+
 def show_options():
     clear_screen()
     lcd.putstr("1:Apple 2:Kiwi")
@@ -100,6 +114,10 @@ def restart_program():
 
 # --- Main Program ---
 def main():
+
+    clear_screen()
+    user_menu()
+
     # Measure temperature
     clear_screen()
     lcd.putstr("Measure temp")

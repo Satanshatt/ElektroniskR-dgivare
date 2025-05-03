@@ -33,13 +33,13 @@ if not lcd_devices:
 lcd = I2cLcd(i2c_lcd, lcd_devices[0], 2, 16)
 
 
-
 # Initialize Temperature sensor
 sensor = MLX90614(i2c_sensor)
 
 
 
 # --- Functions ---
+
 def clear_screen():
     lcd.clear()
     lcd.move_to(0, 0)
@@ -51,6 +51,8 @@ def wait_for_button():
         if not button2.value(): return 2
         if not button3.value(): return 3
         time.sleep(0.05)
+
+
 
 
 def user_menu():
@@ -66,12 +68,6 @@ def user_menu():
             return None 
 
 
-def show_options():
-    clear_screen()
-    lcd.putstr("1:Apple 2:Kiwi")
-    lcd.move_to(1, 0)
-    lcd.putstr("3:Orange")
-
 
 
 def get_random_line(filename):
@@ -82,8 +78,10 @@ def get_random_line(filename):
 
 
 
+
+
 def comment_temp(temp):
-    if temp < 22.0:
+    if temp < 25.0:      #luften ger typ temp 24
         clear_screen() 
         lcd.putstr("Cold blooded?")
         time.sleep(2)
@@ -94,7 +92,7 @@ def comment_temp(temp):
         time.sleep(2)
         clear_screen()
 
-    elif 22.0 <= temp <= 26.0:
+    elif 25.0 <= temp <= 26.0: 
         clear_screen() 
         lcd.putstr("Middle blooded?")
         time.sleep(2)
@@ -118,24 +116,29 @@ def comment_temp(temp):
 
 
 
-def decide(temp, choice):
-    """Decision logic with MOSFET control"""
+def decide(temp, choices):
+    """Decision logic with MOSFET control using all three choices"""
     decision = "Maybe"  # Default
     
-    if temp < 22.0:
-        decision = "Yes" if choice == 1 else "Maybe" if choice == 2 else "No"
-
-    elif 22.0 <= temp <= 26.0:
-        decision = "Maybe" if choice == 1 else "Yes" if choice == 2 else "Maybe"
-
-    else:
-        decision = "No" if choice == 1 else "Maybe" if choice == 2 else "Yes"
+    # Simple example: count how many times each choice was selected
+    choice_counts = {1:0, 2:0, 3:0}
+    for choice in choices:
+        choice_counts[choice] += 1
     
-    # Control MOSFET based on decision (NEW)
+    if temp < 22.0:
+        decision = "Yes" if choice_counts[1] > 1 else "Maybe" if choice_counts[2] > 1 else "No"
+    elif 22.0 <= temp <= 26.0:
+        decision = "Maybe" if choice_counts[1] > 1 else "Yes" if choice_counts[2] > 1 else "Maybe"
+    else:
+        decision = "No" if choice_counts[1] > 1 else "Maybe" if choice_counts[2] > 1 else "Yes"
+    
+    # Control MOSFET based on decision
     greenLED.value(1 if decision == "Yes" else 0)
     redLED.value(1 if decision == "No" else 0)
     blueLED.value(1 if decision == "Maybe" else 0)
     return decision
+
+
 
 
 def restart_program():
@@ -146,9 +149,9 @@ def restart_program():
     redLED.off()
     machine.reset()  # Soft reboot
 
-# --- Main Program ---
-def main():
 
+
+def main():
     clear_screen()
     user_menu()
 
@@ -164,28 +167,29 @@ def main():
     lcd.putstr(f"Temp: {user_temp:.1f}C")
     time.sleep(3)
 
-    comment_temp(user_temp) #print out comment abt temp to user
+    comment_temp(user_temp)
 
-    # Show options
-    clear_screen()
-    lcd.putstr("Pick what you")
-    lcd.move_to(1, 0)
-    lcd.putstr("resonate with")
-    time.sleep(3)
+    # Three rounds of selections
+    choices = []
+    for round_num in range(3):
+        clear_screen()
+        lcd.putstr(f"Round {round_num+1}: Pick")
+        lcd.move_to(1, 0)
+        lcd.putstr("what resonates")
+        time.sleep(3)
 
-    random_line = get_random_line("selections.txt")
-    option1, option2, option3 = random_line.split(',')
+        random_line = get_random_line("selections.txt")
+        option1, option2, option3 = random_line.split(',')
 
-    clear_screen()
-    lcd.putstr(f"1:{option1} 2:{option2}")
-    lcd.move_to(1, 0)
-    lcd.putstr(f"3:{option3}")
+        clear_screen()
+        lcd.putstr(f"1:{option1} 2:{option2}")
+        lcd.move_to(1, 0)
+        lcd.putstr(f"3:{option3}")
 
-    choice = wait_for_button()
+        choices.append(wait_for_button())
 
-
-    # Make decision
-    decision = decide(user_temp, choice)
+    # Make decision based on temperature and all three choices
+    decision = decide(user_temp, choices)
     
     # Show result
     clear_screen()
@@ -193,8 +197,9 @@ def main():
     lcd.move_to(1, 0)
     lcd.putstr(decision)
     
-    # Auto-restart (NEW)
     restart_program()
+
+
 
 if __name__ == "__main__":
     main()

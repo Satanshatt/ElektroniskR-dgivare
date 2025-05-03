@@ -82,11 +82,7 @@ def get_random_line(filename):
 
 
 
-
-def decide(temp, choice):
-    """Decision logic with MOSFET control"""
-    decision = "Maybe"  # Default
-    
+def comment_temp(temp):
     if temp < 22.0:
         clear_screen() 
         lcd.putstr("Cold blooded?")
@@ -97,23 +93,19 @@ def decide(temp, choice):
         lcd.putstr("my calculations")
         time.sleep(2)
 
-        decision = "Yes" if choice == 1 else "Maybe" if choice == 2 else "No"
-
     elif 22.0 <= temp <= 26.0:
         clear_screen() 
-        lcd.putstr("Cold blooded?")
+        lcd.putstr("Middle blooded?")
         time.sleep(2)
         clear_screen()
         lcd.putstr("Now included in")
         lcd.move_to(1,0) 
         lcd.putstr("my calculations")
         time.sleep(2)
-
-        decision = "Maybe" if choice == 1 else "Yes" if choice == 2 else "Maybe"
 
     else:
         clear_screen() 
-        lcd.putstr("Cold blooded?")
+        lcd.putstr("Warm blooded?")
         time.sleep(2)
         clear_screen()
         lcd.putstr("Now included in")
@@ -121,6 +113,19 @@ def decide(temp, choice):
         lcd.putstr("my calculations")
         time.sleep(2)
 
+
+
+def decide(temp, choice):
+    """Decision logic with MOSFET control"""
+    decision = "Maybe"  # Default
+    
+    if temp < 22.0:
+        decision = "Yes" if choice == 1 else "Maybe" if choice == 2 else "No"
+
+    elif 22.0 <= temp <= 26.0:
+        decision = "Maybe" if choice == 1 else "Yes" if choice == 2 else "Maybe"
+
+    else:
         decision = "No" if choice == 1 else "Maybe" if choice == 2 else "Yes"
     
     # Control MOSFET based on decision (NEW)
@@ -128,6 +133,7 @@ def decide(temp, choice):
     redLED.value(1 if decision == "No" else 0)
     blueLED.value(1 if decision == "Maybe" else 0)
     return decision
+
 
 def restart_program():
     """Reset after showing results"""
@@ -155,6 +161,7 @@ def main():
     lcd.putstr(f"Temp: {user_temp:.1f}C")
     time.sleep(3)
 
+    comment_temp(user_temp) #print out comment abt temp to user
 
     # Show options
     clear_screen()

@@ -16,9 +16,9 @@ button2 = machine.Pin(8, machine.Pin.IN, machine.Pin.PULL_UP)
 button3 = machine.Pin(9, machine.Pin.IN, machine.Pin.PULL_UP)
 
 # MOSFET Control (NEW)
-greenLED = machine.Pin(15, machine.Pin.OUT)
-redLED = machine.Pin(14, machine.Pin.OUT)
-blueLED = machine.Pin(13, machine.Pin.OUT)
+greenLED = machine.Pin(15, machine.Pin.OUT, value=0)
+redLED = machine.Pin(14, machine.Pin.OUT, value=0)
+blueLED = machine.Pin(13, machine.Pin.OUT, value=0)
 
 # Start with MOSFET OFF to turn all LED off 
 redLED.off()
@@ -102,40 +102,40 @@ def make_decision(temp, decisions):
         # If the first decision is longer than 5 characters, assign "Yes"
         if len(decision1) > 5:
             decision = "Yes"
-            greenLED.on()
+            #greenLED.on()
         elif len(decision2) > 5:
             decision = "Maybe"
-            blueLED.on()
+            #blueLED.on()
         else:
             decision = "No"
-            redLED.on()
+            #redLED.on()
     
     elif 22.0 <= temp <= 26.0:
         # If the second decision starts with a vowel, assign "Yes"
         if decision2[0].lower() in 'aeiou':  # Check if first letter is a vowel
             decision = "Yes"
-            greenLED.on()
+            #greenLED.on()
         elif len(decision3) > 4:
             decision = "Maybe"
-            blueLED.on()
+            #blueLED.on()
         else:
             decision = "No"
-            redLED.on()
+            #redLED.on()
     
     else:
         # If the third decision contains the letter 'a', assign "Yes"
         if 'a' in decision3.lower():
             decision = "Yes"
-            greenLED.on()
+            #greenLED.on()
         elif len(decision1) > 3:
             decision = "Maybe"
-            blueLED.on()
+            #blueLED.on()
         else:
             decision = "No"
-            redLED.on()
+            #redLED.on()
 
     # Control MOSFET based on final decision (Yes/No logic)
-    greenLED.value(1 if decision == "Yes" else 0)
+    #greenLED.value(1 if decision == "Yes" else 0)
     
     return decision
 
@@ -196,7 +196,8 @@ def display_decision(decision):
     clear_screen()
     lcd.putstr("Decision:")
     lcd.move_to(1, 0)
-    lcd.putstr(decision)
+    padded = decision.ljust(16)  # Ensure line is cleared
+    lcd.putstr(padded)
 
 #Main program should open file and initialize the user loop, User loop should run over and over 
 def main(): 

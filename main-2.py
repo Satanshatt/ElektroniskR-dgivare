@@ -16,8 +16,14 @@ button2 = machine.Pin(8, machine.Pin.IN, machine.Pin.PULL_UP)
 button3 = machine.Pin(9, machine.Pin.IN, machine.Pin.PULL_UP)
 
 # MOSFET Control (NEW)
-mosfet_gate = machine.Pin(15, machine.Pin.OUT)
-mosfet_gate.off()  # Start with MOSFET OFF
+greenLED = machine.Pin(15, machine.Pin.OUT)
+redLED = machine.Pin(14, machine.Pin.OUT)
+blueLED = machine.Pin(13, machine.Pin.OUT)
+
+#start with all LED Off 
+greenLED.off()  # Start with MOSFET OFF
+redLED.off()
+blueLED.off()
 
 # Initialize LCD
 lcd_devices = i2c_lcd.scan()
@@ -60,13 +66,17 @@ def decide(temp, choice):
         decision = "No" if choice == 1 else "Maybe" if choice == 2 else "Yes"
     
     # Control MOSFET based on decision (NEW)
-    mosfet_gate.value(1 if decision == "Yes" else 0)
+    greenLED.value(1 if decision == "Yes" else 0)
+    redLED.value(1 if decision == "No" else 0)
+    blueLED.value(1 if decision == "Maybe" else 0)
     return decision
 
 def restart_program():
     """Reset after showing results"""
     time.sleep(5)  # Show decision for 5 seconds
-    mosfet_gate.off()  # Turn off MOSFET
+    greenLED.off()  # Turn off MOSFET
+    blueLED.off()
+    redLED.off()
     machine.reset()  # Soft reboot
 
 # --- Main Program ---

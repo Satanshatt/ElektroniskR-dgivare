@@ -92,6 +92,7 @@ def comment_temp(temp):
         lcd.move_to(1,0) 
         lcd.putstr("my calculations")
         time.sleep(2)
+        clear_screen()
 
     elif 22.0 <= temp <= 26.0:
         clear_screen() 
@@ -102,6 +103,7 @@ def comment_temp(temp):
         lcd.move_to(1,0) 
         lcd.putstr("my calculations")
         time.sleep(2)
+        clear_screen()
 
     else:
         clear_screen() 
@@ -112,6 +114,7 @@ def comment_temp(temp):
         lcd.move_to(1,0) 
         lcd.putstr("my calculations")
         time.sleep(2)
+        clear_screen()
 
 
 

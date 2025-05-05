@@ -54,6 +54,7 @@ def turn_LED_OFF():
 def clear_terminal():
     print("\033[2J\033[H", end="")
     #Function to clear the terminal, must be tested, don't know if it works 
+    #Might only work with some computers, should work in Thonny 
 
 def user_menu():
     while True:  

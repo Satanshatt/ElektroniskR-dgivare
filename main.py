@@ -3,6 +3,13 @@ import machine
 import random
 from mlx90614 import MLX90614
 
+# --------------------- BEFORE RUNNING --------------------- # 
+# CHECK THAT THE PINS FOR LED AND BUTTONS ARE CORRECT        #
+# ENSURE THAT THE SWITCHES ON THE BOARD ARE IN CORRECT STATE # 
+# MICRO CONTROLLER MUST BE CONNECTED TO COMPUTER TO          #
+# PRINT TO TERMINAL                                          #
+# ---------------------------------------------------------- # 
+
 
 # --- Hardware Setup ---
 

@@ -8,6 +8,8 @@ from mlx90614 import MLX90614
 # ENSURE THAT THE SWITCHES ON THE BOARD ARE IN CORRECT STATE # 
 # MICRO CONTROLLER MUST BE CONNECTED TO COMPUTER TO          #
 # PRINT TO TERMINAL                                          #
+# ENSURE THAT ALL FILES IN REPOSITORY ARE UPLOADED TO THE PI #
+# WITH THE EXACT SAME NAME AS IN THE REPOSITORY!             #
 # ---------------------------------------------------------- # 
 
 

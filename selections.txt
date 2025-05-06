@@ -1,12 +1,12 @@
 Pink,Green,Gold
 Lion,Whale,Elephant
-Bird,Fish,In Between
+Bird,Fish,Between
 Banana,Kiwi,Lemon
 Day,Night,Morning
 Rain,Storm,Sunshine
 Circle,Spiral,Triangle
 Fire,Water,Earth
-Stone,Scal,Feather
+Stone,Scale,Feather
 Mirror,Key,Lantern
 Denim,Lace,Velvet
 Ocean,Desert,Forest

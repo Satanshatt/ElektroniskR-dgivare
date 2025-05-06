@@ -86,3 +86,4 @@ class MLX90615(SensorBase):
         self.i2c = i2c
         self.address = address
         self.dual_zone = False
+

@@ -129,9 +129,11 @@ def decide(temp, choices):
 def restart_program():
     """Reset after showing results"""
     time.sleep(5)  # Show decision for 5 seconds
-    clear_terminal()
+    for _ in range(60):
+        print()
     turn_LED_OFF()
-    machine.reset()  # Soft reboot (check if needed)
+    main()
+    #machine.reset()  # Soft reboot (check if needed)
 
 # --- Main Function --- #
 
@@ -181,4 +183,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
